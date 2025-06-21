@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตรวจสอบวันที่</title>
+    <script>
+        function checkDate() {
+            // กำหนดวันที่ที่ต้องการให้เปิดเนื้อหาหรือข้อความ
+            const targetDate = new Date('2025-06-21'); // วันที่ที่ต้องการ เช่น 1 ก.ค. 2025
+            const today = new Date();  // วันที่ปัจจุบัน
+
+            // คำนวณระยะเวลาที่เหลือ
+            const diffTime = targetDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));  // เปลี่ยนเป็นวัน
+
+            if (diffTime > 0) {
+                // ถ้ายังไม่ถึงวันที่กำหนด
+                document.getElementById('message').style.display = 'block';
+                document.getElementById('helloMessage').style.display = 'none';
+                document.getElementById('remainingDays').textContent = diffDays;
+            } else {
+                // ถ้าเข้าถึงวันที่กำหนดแล้ว
+                document.getElementById('helloMessage').style.display = 'block';
+                document.getElementById('message').style.display = 'none';
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h2>ตรวจสอบวันที่เพื่อเข้าถึงเนื้อหา:</h2>
+    <button onclick="checkDate()">กดเพื่อตรวจสอบ</button>
+
+    <div id="message" style="display: none;">
+        <p>กรุณารออีก <span id="remainingDays"></span> วัน จึงจะสามารถเข้าถึงเนื้อหานี้ได้</p>
+    </div>
+
+    <div id="helloMessage" style="display: none;">
+        <h1>Hello!</h1>
+        <p>ตอนนี้คุณสามารถเข้าถึงเนื้อหานี้ได้แล้ว!</p>
+    </div>
+
+</body>
+</html>
