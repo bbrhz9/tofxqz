@@ -1,45 +1,42 @@
 <!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตรวจสอบวันที่</title>
+<html>
+  <head>
+    <title>บันทึกของฉัน</title>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  </head>
+  <body>
+    <h1>✍️ เว็บจดบันทึก</h1>
+    <textarea id="note" rows="10" cols="40" placeholder="เขียนอะไรก็ได้..."></textarea>
+    <br />
+    <button onclick="saveNote()">💾 บันทึก</button>
+    <button onclick="loadNote()">🔄 โหลด</button>
+
     <script>
-        function checkDate() {
-            // กำหนดวันที่ที่ต้องการให้เปิดเนื้อหาหรือข้อความ
-            const targetDate = new Date('2025-08-29'); // วันที่ที่ต้องการ เช่น 1 ก.ค. 2025
-            const today = new Date();  // วันที่ปัจจุบัน
+      // Firebase config (คุณจะต้องเอาของคุณเองจาก Firebase Console)
+      const firebaseConfig = {
+        apiKey: "API_KEY",
+        authDomain: "xxx.firebaseapp.com",
+        projectId: "xxx",
+        storageBucket: "xxx.appspot.com",
+        messagingSenderId: "xxx",
+        appId: "xxx"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
 
-            // คำนวณระยะเวลาที่เหลือ
-            const diffTime = targetDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));  // เปลี่ยนเป็นวัน
+      function saveNote() {
+        const note = document.getElementById("note").value;
+        db.collection("notes").doc("myNote").set({ content: note });
+      }
 
-            if (diffTime > 0) {
-                // ถ้ายังไม่ถึงวันที่กำหนด
-                document.getElementById('message').style.display = 'block';
-                document.getElementById('helloMessage').style.display = 'none';
-                document.getElementById('remainingDays').textContent = diffDays;
-            } else {
-                // ถ้าเข้าถึงวันที่กำหนดแล้ว
-                document.getElementById('helloMessage').style.display = 'block';
-                document.getElementById('message').style.display = 'none';
-            }
-        }
+      function loadNote() {
+        db.collection("notes").doc("myNote").get().then(doc => {
+          if (doc.exists) {
+            document.getElementById("note").value = doc.data().content;
+          }
+        });
+      }
     </script>
-</head>
-<body>
-
-    <h2>ตรวจสอบวันที่เพื่อเข้าถึงเนื้อหา:</h2>
-    <button onclick="checkDate()">กดเพื่อตรวจสอบ</button>
-
-    <div id="message" style="display: none;">
-        <p>กรุณารออีก <span id="remainingDays"></span> วัน จึงจะสามารถเข้าถึงเนื้อหานี้ได้</p>
-    </div>
-
-    <div id="helloMessage" style="display: none;">
-        <h1>Hello!</h1>
-        <p>ตอนนี้คุณสามารถเข้าถึงเนื้อหานี้ได้แล้ว!</p>
-    </div>
-
-</body>
+  </body>
 </html>
