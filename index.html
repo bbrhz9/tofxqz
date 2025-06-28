@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ค้นหาหินพลังของคุณ • Gemstone Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500&family=Sriracha&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --amethyst: #9b59b6;
+            --ruby: #e74c3c;
+            --emerald: #2ecc71;
+            --sapphire: #3498db;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: var(--bg-gradient);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.5s;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease;
+        }
+        
+        h1 {
+            font-family: 'Sriracha', cursive;
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--amethyst), var(--sapphire));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .quiz-container {
+            display: block;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transform: translateY(0);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .option-btn {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        
+        .option-btn:hover {
+            border-color: var(--amethyst);
+            background: #f9f9f9;
+        }
+        
+        #result {
+            display: none;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+        
+        .gem-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        
+        .gem-image {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            margin: 0 auto 20px;
+            display: block;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.5s;
+        }
+        
+        .gem-image:hover {
+            transform: rotate(10deg) scale(1.05);
+        }
+        
+        .gem-name {
+            font-size: 2rem;
+            margin: 10px 0;
+            font-family: 'Sriracha', cursive;
+        }
+        
+        .gem-type {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: #eee;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .gem-desc {
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .gem-science {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        
+        .restart-btn {
+            background: var(--amethyst);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
+        }
+        
+        .restart-btn:hover {
+            background: var(--ruby);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--amethyst), var(--sapphire));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ค้นหาหินพลังของคุณ</h1>
+        <p class="intro">ตอบคำถามเพียง 5 ข้อ เพื่อค้นพบหินที่สะท้อนบุคลิกภาพที่แท้จริงของคุณ!</p>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="quiz-container" id="quiz">
+            <!-- คำถามจะถูกเพิ่มโดย JavaScript -->
+        </div>
+        
+        <div class="result-container" id="result">
+            <div class="gem-card">
+                <img class="gem-image" id="gem-image" src="" alt="หินประจำตัว">
+                <h2 class="gem-name" id="gem-name"></h2>
+                <span class="gem-type" id="gem-type"></span>
+                <p class="gem-desc" id="gem-desc"></p>
+                <div class="gem-science" id="gem-science"></div>
+                <button class="restart-btn" onclick="restartQuiz()">ทำแบบทดสอบอีกครั้ง</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ข้อมูลคำถาม (สามารถเพิ่มได้มากกว่า 5 คำถาม และระบบจะสุ่มมาใช้)
+        const questions = [
+            {
+                question: "เมื่อคุณรู้สึกเหนื่อยล้า คุณมักจะ...",
+                options: [
+                    { text: "แสวงหาความสงบในที่เงียบๆ", gem: "amethyst" },
+                    { text: "ออกไปพบปะผู้คนเพื่อเติมพลังงาน", gem: "ruby" },
+                    { text: "วางแผนสิ่งที่จะทำต่อไปอย่างมีระบบ", gem: "emerald" },
+                    { text: "ปล่อยให้ความคิดล่องลอยไปเรื่อยๆ", gem: "sapphire" }
+                ]
+            },
+            {
+                question: "สีที่คุณรู้สึกว่าสะท้อนตัวคุณที่สุดคือ?",
+                options: [
+                    { text: "ม่วง (ลึกลับ)", gem: "amethyst" },
+                    { text: "แดง (พลัง)", gem: "ruby" },
+                    { text: "เขียว (ความสมดุล)", gem: "emerald" },
+                    { text: "น้ำเงิน (ความสงบ)", gem: "sapphire" }
+                ]
+            },
+            {
+                question: "ในสายตาของเพื่อน คุณคือคนแบบไหน?",
+                options: [
+                    { text: "คนช่างวิเคราะห์", gem: "amethyst" },
+                    { text: "คนที่มีพลัง", gem: "ruby" },
+                    { text: "คนที่เชื่อถือได้", gem: "emerald" },
+                    { text: "คนที่เข้าใจผู้อื่น", gem: "sapphire" }
+                ]
+            },
+            {
+                question: "คุณเชื่อในเรื่องอะไรมากที่สุด?",
+                options: [
+                    { text: "สัญชาตญาณและจิตวิญญาณ", gem: "amethyst" },
+                    { text: "ความหลงใหลและแรงผลักดัน", gem: "ruby" },
+                    { text: "ความจริงและความยุติธรรม", gem: "emerald" },
+                    { text: "ความรักและความเข้าใจ", gem: "sapphire" }
+                ]
+            },
+            {
+                question: "สถานที่ในฝันของคุณคือ?",
+                options: [
+                    { text: "ถ้ำโบราณที่เต็มไปด้วยความลับ", gem: "amethyst" },
+                    { text: "ยอดภูเขาไฟที่ร้อนแรง", gem: "ruby" },
+                    { text: "ป่าเขียวชอุ่มที่อุดมสมบูรณ์", gem: "emerald" },
+                    { text: "ท้องทะเลสีครามที่กว้างใหญ่", gem: "sapphire" }
+                ]
+            }
+        ];
+
+        // ข้อมูลหิน (ผลลัพธ์)
+        const gems = {
+            amethyst: {
+                name: "อะเมทิสต์",
+                type: "หินแห่งปัญญาและจิตวิญญาณ",
+                desc: "คุณเป็นคนช่างคิด ชอบวิเคราะห์ และมีสัญชาตญาณที่แม่นยำ หินอะเมทิสต์จะช่วยเสริมความสงบและความฉลาดทางอารมณ์ให้คุณ",
+                science: "SiO₂ + Fe³⁺ | ความแข็ง 7 โมฮส์ | เกิดในโพรงหินภูเขาไฟ",
+                color: "--amethyst",
+                image: "https://cdn.pixabay.com/photo/2017/07/13/02/53/stone-2499289_640.jpg"
+            },
+            ruby: {
+                name: "ทับทิม",
+                type: "หินแห่งความหลงใหลและพลัง",
+                desc: "คุณเปี่ยมไปด้วยพลังชีวิตและความมุ่งมั่น ทับทิมจะช่วยเสริมความกล้าหาญและความกระตือรือร้นในตัวคุณ",
+                science: "Al₂O₃:Cr | ความแข็ง 9 โมฮส์ | หนึ่งในหินมีค่าที่หายาก",
+                color: "--ruby",
+                image: "https://cdn.pixabay.com/photo/2017/06/08/18/45/ruby-2385476_640.jpg"
+            },
+            emerald: {
+                name: "มรกต",
+                type: "หินแห่งความสมดุลและความจริง",
+                desc: "คุณเป็นคนจริงใจและมองโลกในแง่ดี มรกตจะช่วยเสริมความสมดุลและความเจริญรุ่งเรืองในชีวิตคุณ",
+                science: "Be₃Al₂(SiO₃)₆ | ความแข็ง 7.5-8 โมฮส์ | มักมีรอยแตกภายใน",
+                color: "--emerald",
+                image: "https://cdn.pixabay.com/photo/2017/06/08/18/44/emerald-2385475_640.jpg"
+            },
+            sapphire: {
+                name: "ไพลิน",
+                type: "หินแห่งความสงบและภูมิปัญญา",
+                desc: "คุณเป็นคนสุขุมและมีเหตุผล ไพลินจะช่วยเสริมสติปัญญาและความสงบทางจิตใจให้คุณ",
+                science: "Al₂O₃ | ความแข็ง 9 โมฮส์ | มีหลายสีแต่สีน้ำเงินมีค่าที่สุด",
+                color: "--sapphire",
+                image: "https://cdn.pixabay.com/photo/2017/06/08/18/44/sapphire-2385474_640.jpg"
+            }
+        };
+
+        // ตัวแปรเก็บสถานะ
+        let currentQuestion = 0;
+        let selectedQuestions = [];
+        let userAnswers = {};
+        const totalQuestions = 5; // จำนวนคำถามที่จะแสดง
+
+        // สุ่มคำถามเมื่อเริ่ม
+        function initQuiz() {
+            // สุ่มคำถามจากทั้งหมด (ถ้ามีมากกว่า 5 คำถาม)
+            selectedQuestions = [...questions]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, totalQuestions);
+            
+            showQuestion();
+        }
+
+        // แสดงคำถามปัจจุบัน
+        function showQuestion() {
+            const quizContainer = document.getElementById("quiz");
+            const progressBar = document.getElementById("progress");
+            
+            // อัปเดต progress bar
+            progressBar.style.width = `${(currentQuestion / totalQuestions) * 100}%`;
+            
+            // สร้างคำถาม HTML
+            if (currentQuestion < selectedQuestions.length) {
+                const q = selectedQuestions[currentQuestion];
+                let optionsHTML = q.options.map(
+                    (opt, idx) => `
+                    <button class="option-btn" onclick="selectOption(${idx})">
+                        ${opt.text}
+                    </button>`
+                ).join("");
+                
+                quizContainer.innerHTML = `
+                    <div class="question-card">
+                        <div class="question-text">${q.question}</div>
+                        <div class="options">${optionsHTML}</div>
+                    </div>
+                `;
+            } else {
+                showResult();
+            }
+        }
+
+        // เมื่อเลือกคำตอบ
+        function selectOption(optionIdx) {
+            const selectedGem = selectedQuestions[currentQuestion].options[optionIdx].gem;
+            
+            // บันทึกคำตอบ
+            userAnswers[selectedGem] = (userAnswers[selectedGem] || 0) + 1;
+            
+            // ไปคำถามต่อไป
+            currentQuestion++;
+            showQuestion();
+        }
+
+        // แสดงผลลัพธ์
+        function showResult() {
+            // หาหินที่ได้คะแนนสูงสุด
+            let maxScore = 0;
+            let yourGem = "amethyst"; // ค่าเริ่มต้น
+            
+            for (const gem in userAnswers) {
+                if (userAnswers[gem] > maxScore) {
+                    maxScore = userAnswers[gem];
+                    yourGem = gem;
+                }
+            }
+            
+            // แสดงผลลัพธ์
+            document.getElementById("quiz").style.display = "none";
+            document.getElementById("result").style.display = "block";
+            
+            const gem = gems[yourGem];
+            document.getElementById("gem-name").textContent = gem.name;
+            document.getElementById("gem-type").textContent = gem.type;
+            document.getElementById("gem-desc").textContent = gem.desc;
+            document.getElementById("gem-science").textContent = gem.science;
+            document.getElementById("gem-image").src = gem.image;
+            
+            // เปลี่ยนสีพื้นหลังตามหิน
+            document.body.style.background = `linear-gradient(135deg, var(${gem.color}) 0%, #c3cfe2 100%)`;
+        }
+
+        // รีเซ็ตแบบทดสอบ
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = {};
+            document.getElementById("result").style.display = "none";
+            document.getElementById("quiz").style.display = "block";
+            document.body.style.background = "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)";
+            initQuiz();
+        }
+
+        // เริ่มแบบทดสอบเมื่อโหลดหน้า
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
